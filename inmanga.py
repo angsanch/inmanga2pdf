@@ -3,15 +3,22 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 import selenium.webdriver.support.expected_conditions as EC
+import os
+import json
 
 class inmangaAPI:
 	def __init__ (self):
 		self.options = selenium.webdriver.FirefoxOptions ()
 		self.options.add_argument ("--headless")
 
-		self.driverpath = "geckodriver.exe"
-		self.binarypath = FirefoxBinary ("Firefox/firefox.exe")
-		self.driver = selenium.webdriver.Firefox (executable_path=self.driverpath, options=self.options, firefox_binary=self.binarypath)
+		if os.path.exists ("firefox.json"):
+			self.json = json.loads (open ("firefox.json", "r").readline ())
+			self.driverpath = self.json["driverpath"]
+			self.binarypath = FirefoxBinary (self.json["binarypath"])
+			self.driver = selenium.webdriver.Firefox (executable_path=self.driverpath, options=self.options, firefox_binary=self.binarypath)
+		else:
+			self.driverpath = "geckodriver.exe"
+			self.driver = selenium.webdriver.Firefox (executable_path=self.driverpath, options=self.options)
 		self.driver.set_window_size (1200, 600)
 
 	def select_manga (self, url, chapter = None):
