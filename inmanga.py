@@ -7,7 +7,8 @@ import os
 import json
 
 class inmangaAPI:
-	def __init__ (self):
+	def __init__ (self, timeout=10):
+		self.timeout = timeout
 		self.options = selenium.webdriver.FirefoxOptions ()
 		self.options.add_argument ("--headless")
 
@@ -23,19 +24,19 @@ class inmangaAPI:
 
 	def select_manga (self, url, chapter = None):
 		self.driver.get (url)
-		WebDriverWait (self.driver, 10).until (EC.presence_of_element_located ((By.CLASS_NAME, "select2-selection__arrow"))).click ()
+		WebDriverWait (self.driver, self.timeout).until (EC.presence_of_element_located ((By.CLASS_NAME, "select2-selection__arrow"))).click ()
 		self.chapterList = self.driver.find_element (By.ID, "select2-ChapList-results").find_elements (By.CSS_SELECTOR, "*")
 		self.chapterTitleList = [i.get_attribute ("innerHTML") for i in self.chapterList]
 		if chapter != None:
 			self.chapterList[self.chapterTitleList.index (chapter)].click ()
 		
-		self.manga_name = WebDriverWait (self.driver, 10).until (EC.presence_of_element_located ((By.TAG_NAME, "strong"))).find_element (By.TAG_NAME, "a").get_attribute ("innerHTML")
+		self.manga_name = WebDriverWait (self.driver, self.timeout).until (EC.presence_of_element_located ((By.TAG_NAME, "strong"))).find_element (By.TAG_NAME, "a").get_attribute ("innerHTML")
 		self.manga_name = self.manga_name [self.manga_name.rfind (">")+2:-21]
 
 		max_tabs (self.driver, 1)
 
 	def get_chapter_image_urls (self):
-		self.pageList = WebDriverWait (self.driver, 10).until (EC.presence_of_element_located ((By.ID, "PageList"))).find_elements (By.CSS_SELECTOR, "*")
+		self.pageList = WebDriverWait (self.driver, self.timeout).until (EC.presence_of_element_located ((By.ID, "PageList"))).find_elements (By.CSS_SELECTOR, "*")
 		self.baseURL = self.driver.find_elements (By.TAG_NAME, "img")[1].get_attribute ("src")
 		self.baseURL = self.baseURL[:self.baseURL.rfind("/")]
 		self.baseURL = self.baseURL[:self.baseURL.rfind("/")]
