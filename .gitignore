@@ -1,5 +1,7 @@
 /__pycache__
 /Firefox
+/inmanga2pdf
+inmanga2pdf.zip
 geckodriver.exe
 geckodriver.log
 firefox.json
