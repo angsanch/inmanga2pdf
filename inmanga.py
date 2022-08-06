@@ -23,6 +23,8 @@ class inmangaAPI:
 		self.driver.set_window_size (1200, 600)
 
 	def select_manga (self, url, chapter = None):
+		if len (url.split ("/"))==7:
+			raise ImportWarning ("You have provided the general warning of the manga, the programs needs the link to one of the chapters")
 		self.driver.get (url)
 		WebDriverWait (self.driver, self.timeout).until (EC.presence_of_element_located ((By.CLASS_NAME, "select2-selection__arrow"))).click ()
 		self.chapterList = self.driver.find_element (By.ID, "select2-ChapList-results").find_elements (By.CSS_SELECTOR, "*")
