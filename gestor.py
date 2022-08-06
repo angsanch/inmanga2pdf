@@ -3,7 +3,9 @@ import requests
 import img2pdf
 import os
 
-inm = inmanga.inmangaAPI ()
+def startAPI (timeout=10, headless=True):
+	global inm 
+	inm = inmanga.inmangaAPI (timeout=timeout, headless=headless)
 
 def download_chapter (manga_url, chapter, filename):
 	inm.select_manga (manga_url, chapter)

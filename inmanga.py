@@ -7,10 +7,10 @@ import os
 import json
 
 class inmangaAPI:
-	def __init__ (self, timeout=10):
+	def __init__ (self, timeout=10, headless=True):
 		self.timeout = timeout
 		self.options = selenium.webdriver.FirefoxOptions ()
-		self.options.add_argument ("--headless")
+		if headless: self.options.add_argument ("--headless")
 
 		if os.path.exists ("firefox.json"):
 			self.json = json.loads (open ("firefox.json", "r").readline ())

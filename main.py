@@ -20,5 +20,6 @@ def command_line ():
 
 
 if __name__ == "__main__":
+	gestor.startAPI ()
 	command_line ()
 	input ("--ended--")
