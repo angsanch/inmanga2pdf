@@ -45,6 +45,9 @@ class inmangaAPI:
 
 		return [f"{self.baseURL}/{i.get_attribute ('innerHTML')}/{i.get_attribute ('value')}" for i in self.pageList]
 
+	def end (self):
+		self.driver.quit ()
+
 def max_tabs (driver, max):
 	if len (driver.window_handles) > max:
 		old_tab = driver.current_window_handle
