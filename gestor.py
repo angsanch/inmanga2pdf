@@ -38,4 +38,8 @@ def select_in_page (frequency=1):
 		#Check if any button has been pressed and act if it has
 		status = inm.check_buttons ()
 		if status != None: break
+
+		#Control amount of tabs
+		inmanga.max_tabs (inm.driver, 1)
+
 		time.sleep (frequency)
