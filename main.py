@@ -25,7 +25,7 @@ def command_line (data={}):
 		gestor.download_manga (manga_url, dir)
 
 
-if __name__ == "__main__":
+def main ():
 	answer = tkinter.messagebox.askyesnocancel ("Decide mode popup", "Do you have the link to the manga")
 	if answer:
 		gestor.startAPI ()
@@ -41,4 +41,10 @@ if __name__ == "__main__":
 		command_line (data)
 
 	gestor.stopAPI ()
+
+if __name__ == "__main__":
+	try:
+		main ()
+	except Exception as e:
+		print (e)
 	input ("--ended--")
