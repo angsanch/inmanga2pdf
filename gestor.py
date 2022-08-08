@@ -4,6 +4,7 @@ import img2pdf
 import os
 import time
 import urlmatch
+import json
 
 def startAPI (timeout=10, headless=True):
 	global inm 
@@ -43,3 +44,13 @@ def select_in_page (frequency=1):
 		inmanga.max_tabs (inm.driver, 1)
 
 		time.sleep (frequency)
+	status=json.loads (status)
+	inm.select_manga (inm.driver.current_url)
+
+	data = {}
+	data["mode"]=status["kind"]
+	if status["kind"] == "chapter": data["chapter"] = inm.currentChapter
+	data["url"]=inm.driver.current_url
+	data["manga_name"] = inm.manga_name
+
+	return data
