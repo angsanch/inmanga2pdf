@@ -27,6 +27,10 @@ def download_manga (manga_url, dir):
 	for i in inm.chapterTitleList:
 		download_chapter (manga_url, i, os.path.join (dir, 	f"{inm.manga_name}-{i}.pdf"))
 
+def get_manga_name (manga_url):
+	inm.select_manga (manga_url)
+	return inm.manga_name
+
 def select_in_page (frequency=1):
 	inm.go_to_inmanga ()
 	while True:
