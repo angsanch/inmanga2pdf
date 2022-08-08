@@ -2,6 +2,8 @@ import inmanga
 import requests
 import img2pdf
 import os
+import time
+import urlmatch
 
 def startAPI (timeout=10, headless=True):
 	global inm 
@@ -23,3 +25,17 @@ def download_manga (manga_url, dir):
 	inm.select_manga (manga_url)
 	for i in inm.chapterTitleList:
 		download_chapter (manga_url, i, os.path.join (dir, 	f"{inm.manga_name}-{i}.pdf"))
+
+def select_in_page (frequency=1):
+	inm.go_to_inmanga ()
+	while True:
+		#Check if page is new and try to insert buttons if they are not inserted yet
+		if not inm.is_marked ():
+			if urlmatch.urlmatch ("https://inmanga.com/ver/manga/*/*/*", inm.driver.current_url):
+				inm.insert_buttons ()
+			inm.insert_page_marker ()
+
+		#Check if any button has been pressed and act if it has
+		status = inm.check_buttons ()
+		if status != None: break
+		time.sleep (frequency)

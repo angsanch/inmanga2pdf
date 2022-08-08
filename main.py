@@ -1,6 +1,7 @@
 import gestor
 import tkinter
 import tkinter.filedialog
+import tkinter.messagebox
 
 root = tkinter.Tk () 
 root.withdraw ()
@@ -20,8 +21,14 @@ def command_line ():
 
 
 if __name__ == "__main__":
-	gestor.startAPI ()
-	command_line ()
+	answer = tkinter.messagebox.askyesnocancel ("Decide mode popup", "Do you have the link to the manga")
+	if answer:
+		gestor.startAPI ()
+		command_line ()
+	elif answer == False:
+		tkinter.messagebox.showinfo ("Instructions", "Go to the chapter you want to download and press one of the buttons")
+		gestor.startAPI (headless=False)
+		gestor.select_in_page ()
 
 	gestor.stopAPI ()
 	input ("--ended--")

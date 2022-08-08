@@ -45,6 +45,32 @@ class inmangaAPI:
 
 		return [f"{self.baseURL}/{i.get_attribute ('innerHTML')}/{i.get_attribute ('value')}" for i in self.pageList]
 
+	def go_to_inmanga (self):
+		self.driver.get ("https://inmanga.com/")
+	
+	def insert_buttons (self):
+		for i in range (5):
+			try:
+				self.driver.execute_script(add_button_script)
+				break
+			except:
+				pass
+	def check_buttons (self):
+		try:
+			return self.driver.find_element (By.ID, "inmanga2pdfButonPress").get_attribute ("payload")
+		except:
+			return None
+
+	def insert_page_marker (self):
+		self.driver.execute_script ("elem=document.createElement ('meta');elem.setAttribute('id','inmanga2pdfMarked');document.getElementsByTagName('head')[0].appendChild(elem);")
+	def is_marked (self):
+		try:
+			self.driver.find_element (By.ID, "inmanga2pdfMarked")
+			found = True
+		except:
+			found = False
+		return found
+
 	def end (self):
 		self.driver.quit ()
 
@@ -54,3 +80,35 @@ def max_tabs (driver, max):
 		driver.switch_to.window(driver.window_handles[max])
 		driver.close ()
 		driver.switch_to.window(old_tab)
+
+add_button_script = """
+buttons=document.getElementsByClassName("pull-right")[1];
+buttons.parentElement.appendChild(buttons.cloneNode(true));
+buttons=buttons.parentElement.children[1];
+button1=buttons.children[0];
+button2=buttons.children[1];
+clone=button1.children[0].cloneNode(true);
+button1.children[0].remove();
+button1.appendChild(clone);
+button1.children[1].classList.remove('custom-btn-label-left');
+button1.children[1].classList.add('custom-btn-label-right');
+button1.children[1].children[0].classList.remove('fa-arrow-left');
+button1.children[1].children[0].classList.add('fa-arrow-down');
+button2.children[1].children[0].classList.remove('fa-arrow-right');
+button2.children[1].children[0].classList.add('fa-arrow-down');
+clone=button2.children[1].children[0].cloneNode(true);
+button2.children[1].appendChild(clone);
+button1.children[0].innerHTML='Chapter';
+button2.children[0].innerHTML='Manga';
+button1.setAttribute('onclick','but=document.getElementById("inmanga2pdfButton");but.setAttribute("payload","chapter");but.click();');
+button2.setAttribute('onclick','but=document.getElementById("inmanga2pdfButton");but.setAttribute("payload","manga");but.click();');
+button3=document.createElement('button');
+button3.setAttribute('id','inmanga2pdfButton');
+button3.setAttribute('onclick',`(function(kind){
+    payload=document.createElement('meta');
+    payload.setAttribute('id','inmanga2pdfButonPress');
+    payload.setAttribute('payload','{"kind":"'+kind+'"}');
+    document.getElementsByTagName('head')[0].appendChild(payload);
+})(kind=this.getAttribute('payload'));`);
+document.head.appendChild(button3);
+"""
